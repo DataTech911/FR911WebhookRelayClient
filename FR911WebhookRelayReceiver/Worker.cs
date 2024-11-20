@@ -36,7 +36,8 @@ public class Worker : BackgroundService
         // If Interest is Incident.Update or Incident.Close there will be Notification.Delta
         var difference = args.WebhookNotification.Delta;
 
-        // Do something useful with the payload.  DO NOT synchronously block.  Message lock will be lost in 60s
+        // Process the payload. DO NOT synchronously block.  Message lock will be lost in 60s
+        // Message consumer should be idempotent in case of redelivery
         await Task.Delay(100);// Simulate work
 
         var message = args?.WebhookNotification?.Interest switch
