@@ -8,21 +8,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-// See appsettings.json for required confiruation values.
+// See appsettings.json for required configuration values.
 
-var builder = Host.CreateApplicationBuilder(args); // Or WebApplication.CreateBuilder(args) if you're boostrapping ASPNet
-builder.Services.AddLogging(options =>
-{
-    options.SetMinimumLevel(LogLevel.Debug);
-    options.AddSimpleConsole(consoleOptions =>
-    {
-        consoleOptions.SingleLine = false;
-        consoleOptions.TimestampFormat = "HH:mm:ss.fff ";
-        consoleOptions.ColorBehavior = Microsoft.Extensions.Logging.Console.LoggerColorBehavior.Enabled;
-        consoleOptions.UseUtcTimestamp = true;
-    });
-});
+var builder = Host.CreateApplicationBuilder(args); // Or WebApplication.CreateBuilder(args) if you're boostrapping AspNet
 builder.Configuration.AddUserSecrets<Worker>();
+
+builder.Logging.AddSimpleConsole(consoleOptions =>
+{
+    consoleOptions.SingleLine = false;
+    consoleOptions.TimestampFormat = "HH:mm:ss.fff ";
+    consoleOptions.UseUtcTimestamp = true;
+});
 
 // Get a partial copy from local settings (secrets) to bootstrap the WebhookRelayMessageProcessorOptions
 var relayOptionsFileConfig = builder.Configuration.GetSection(nameof(WebhookRelayMessageProcessorOptions))
@@ -30,8 +26,8 @@ var relayOptionsFileConfig = builder.Configuration.GetSection(nameof(WebhookRela
 
 builder.Services.AddHttpClient<FR911ApiClient>(FR911ApiClient.Name, (services, client) =>
 {
-    client.BaseAddress = new Uri(relayOptionsFileConfig!.ApiUri);// new Uri("https://api.firstresponse911.net");
-    client.DefaultRequestHeaders.Add(HttpConstants.FR911ApiKeyHeader, relayOptionsFileConfig.ApiKey/*API_KEY*/);
+    client.BaseAddress = new Uri(relayOptionsFileConfig!.ApiUri);
+    client.DefaultRequestHeaders.Add(HttpConstants.FR911ApiKeyHeader, relayOptionsFileConfig.ApiKey);
 })
     .AddStandardResilienceHandler();
 

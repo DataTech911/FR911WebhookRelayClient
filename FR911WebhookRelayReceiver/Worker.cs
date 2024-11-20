@@ -27,29 +27,30 @@ public class Worker : BackgroundService
     }
 
     private async Task _webhookRelayProcessor_OnWebhookNotification(object source, WebhookRelayMessageArgs args)
-    {
-        // Don't synchronously Block in the EventHandler        
-        _logger.LogDebug($"Received WebhookNotification: \n{args.WebhookNotification}");// args.WebhookNotification}");
+    {     
+        _logger.LogDebug($"Received WebhookNotification: \n{args.WebhookNotification}");
 
-        // If Interest is Incident.Net or Incident.Update there will be Notification.CurrentState
+        // All Interests Notifications include Notification.CurrentState
         var currentState = args.WebhookNotification!.CurrentState;
 
-        // If Interest is Incident.Update or Incident.Close there will be Notification.Differences
-        var difference = args.WebhookNotification.Differences;
+        // If Interest is Incident.Update or Incident.Close there will be Notification.Delta
+        var difference = args.WebhookNotification.Delta;
+
+        // Do something useful with the payload.  DO NOT synchronously block.  Message lock will be lost in 60s
+        await Task.Delay(100);// Simulate work
 
         var message = args?.WebhookNotification?.Interest switch
         {
-            WebhookInterests.IncidentNew => "Process New Incident",
-            WebhookInterests.IncidentUpdate => "Process Update Incident",
-            WebhookInterests.IncidentClose => "Process Close Incident",
+            WebhookInterests.IncidentNew => "Received New Incident",
+            WebhookInterests.IncidentUpdate => "Received Update Incident",
+            WebhookInterests.IncidentClose => "Received Close Incident",
             _ => "Received Unknown Interest",
-        };
-        _logger.LogDebug(message);
+        };        
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Starting WebhookRelayMessageProcessor");
+        _logger.LogInformation("Starting WebhookRelayMessageProcessor Worker");
         await _webhookRelayProcessor.Start();
         
         while (!stoppingToken.IsCancellationRequested)
@@ -63,7 +64,7 @@ public class Worker : BackgroundService
         }
         _webhookRelayProcessor.OnWebhookNotification -= _webhookRelayProcessor_OnWebhookNotification;
         await _webhookRelayProcessor.Stop();
-        _logger.LogDebug("Worker finished.");
+        _logger.LogDebug("WebhookRelayMessageProcessor Worker finished.");
     }
 
     private async Task UpdateSettings()

@@ -9,18 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appSettings.json" />
+    <None Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appSettings.json">
+    <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FR911.Api.Client" Version="2.1.24.328" />
-    <PackageReference Include="FR911.Webhooks.Integration" Version="2.1.24.339" />
+    <PackageReference Include="FR911.Webhooks.Integration" Version="2.1.24.342" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.10.0" />
