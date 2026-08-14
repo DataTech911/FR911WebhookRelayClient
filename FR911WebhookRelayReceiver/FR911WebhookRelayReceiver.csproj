@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FR911.Api.Client" Version="2.2.26.49" />
-    <PackageReference Include="FR911.Webhooks.Integration" Version="2.1.25.225" />
+    <PackageReference Include="FR911.Api.Client" Version="2.2.26.52" />
+    <PackageReference Include="FR911.Webhooks.Integration" Version="2.2.26.182" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.7.0" />
