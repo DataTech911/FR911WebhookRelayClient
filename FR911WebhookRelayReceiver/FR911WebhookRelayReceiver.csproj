@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FR911.Api.Client" Version="2.2.26.55" />
+    <PackageReference Include="FR911.Api.Client" Version="2.2.26.61" />
     <PackageReference Include="FR911.Webhooks.Integration" Version="2.2.26.182" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.7.0" />
   </ItemGroup>
 
