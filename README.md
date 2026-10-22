@@ -93,13 +93,19 @@ private async Task OnNotification(object source, WebhookRelayMessageArgs args)
 }
 ```
 
-### Two rules for your handler
+### Three rules for your handler
 
-**Do not block synchronously.** The message lock is held for 60 seconds. Hand off long work to a
-queue or background task and return.
+**Do not block synchronously.** The message lock is held for 60 seconds, and the processor renews it
+for up to 2 minutes. If your work takes longer, hand it off to your own durable queue and return.
 
-**Be idempotent.** A message can be redelivered — after a lock expiry, a transient fault, or a
-regional failover. Processing the same notification twice must be safe.
+**Throw to retry.** A message is completed only after your handler's `Task` finishes. If the handler
+throws, including after an `await`, the message is redelivered and is dead-lettered after the
+maximum delivery count. Work you hand off to a background task is outside this guarantee. Requires
+`FR911.Webhooks.Integration` 2.2.26.295 or later. Earlier versions completed the message without
+waiting for async handlers.
+
+**Be idempotent.** A message can be redelivered — after a handler failure, a lock expiry, a transient
+fault, or a regional failover. Processing the same notification twice must be safe.
 
 ## Configuration
 
